@@ -1,0 +1,27 @@
+{
+  "title": "Keyboard Switcher",
+  "rules": [
+    {
+      "description": "Switch Profiles",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "space",
+            "modifiers": {
+              "mandatory": [
+                "control",
+                "option"
+              ]
+            }
+          },
+          "to": [
+            {
+              "shell_command": "~/.config/karabiner/complex-modifications/cycle"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
