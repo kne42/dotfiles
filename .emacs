@@ -162,7 +162,7 @@
  ("M-r" . set-mark-command)
  ("C-M-f" . exchange-point-and-mark)
 
- ("M-f" . search-forward)
+ ("M-f" . isearch-forward)
 
  ("C-' C-'" .  buffer-menu)       ; Select a buffer from the list.
  ("C-' C-;" .  find-file)         ;
