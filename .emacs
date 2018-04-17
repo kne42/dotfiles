@@ -9,7 +9,12 @@
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
-  (package-install 'use-package))
+  (package-install 'use-package)
+  (defun install-fonts ()
+    (interactive)
+    (message "Installing all-the-icons icon fonts.")
+    (all-the-icons-install-fonts :pfx))
+  (add-hook 'after-init-hook 'install-fonts))
 
 (eval-when-compile (require 'use-package))
 (setq use-package-always-ensure t)
@@ -178,6 +183,10 @@
  ("C-l o" . transpose-windows)
  ("C-o" . other-window)
  ("<escape>" . keyboard-escape-quit))
+
+(bind-keys :map isearch-mode-map
+           ("C-f" . isearch-repeat-forward)
+           ("C-r" . isearch-repeat-backward))
 
 (defadvice keyboard-escape-quit (around my-keyboard-escape-quit activate)
   (let (orig-one-window-p)
