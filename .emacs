@@ -46,7 +46,7 @@
                                           (current-buffer))))))
 (use-package expand-region
   :bind ("C-M-r" . er/expand-region))
-
+(use-package logview)
 (use-package all-the-icons)
 (use-package neotree
   :bind ("C-' C-l" . neotree-toggle)
