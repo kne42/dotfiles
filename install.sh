@@ -29,4 +29,3 @@ if [ $response == "y" ]; then
     ln -s "$DIR/hyper.js" ~/.hyper.js
 else
     echo "please manually move your files :)"
-EOF
