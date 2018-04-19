@@ -12,7 +12,7 @@ echo "project directory: $DIR"
 #--
 read -p "will delete previous backup folder (if it exists). continue? y/n" response
 echo $response
-if [ $response = "y" ]; then
+if [ $response == "y" ]; then
     echo "copying previous config files to ~/.backups/"
     mv ~/.emacs ~/.emacs.bak
     mv ~/.config/karabiner XS~/.config/karabiner.bak
