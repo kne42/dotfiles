@@ -15,7 +15,7 @@ echo $response
 if [ $response = "y" ]; then
     echo "copying previous config files to ~/.backups/"
     mv ~/.emacs ~/.emacs.bak
-    mv ~/.config/ ~/.config/.bak
+    mv ~/.config/ ~/.config/karabiner.bak
     mv ~/.hyper.js ~/.hyper.js.bak
 
     echo "beginning linking operation"
