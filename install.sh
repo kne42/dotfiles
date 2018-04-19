@@ -13,18 +13,10 @@ echo "project directory: $DIR"
 read -p "will delete previous backup folder (if it exists). continue? y/n" response
 echo $response
 if [ $response = "y" ]; then
-    echo "made it into loop"
-    rm -rf ~/.backups
     echo "copying previous config files to ~/.backups/"
-    mkdir -p ~/.backups
-    mv ~/.emacs ~/.backups/.emacs
-    mv ~/.config/ ~/.backups/.config/
-    mv ~/.hyper.js ~/.backups/.emacs
-
-    echo "deleting previous config files..."
-    rm -rf ~/.emacs
-    rm -rf ~/.config/
-    rm -rf ~/.hyper.js
+    mv ~/.emacs ~/.emacs.bak
+    mv ~/.config/ ~/.config/.bak
+    mv ~/.hyper.js ~/.hyper.js.bak
 
     echo "beginning linking operation"
     echo "linking emacs to ~/.emacs"
