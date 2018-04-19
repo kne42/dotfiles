@@ -10,9 +10,10 @@ done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 echo "project directory: $DIR"
 #--
-read -p "will delete previous backup folder (if it exists). continue? y/n" $response
-if [[ $response = "y"]]
-then
+read -p "will delete previous backup folder (if it exists). continue? y/n" response
+echo $response
+if [ $response = "y" ]; then
+    echo "made it into loop"
     rm -rf ~/.backups
     echo "copying previous config files to ~/.backups/"
     mkdir -p ~/.backups
@@ -36,3 +37,4 @@ then
     ln -s "$DIR/hyper.js" ~/.hyper.js
 else
     echo "please manually move your files :)"
+EOF
