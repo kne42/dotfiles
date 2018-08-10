@@ -53,6 +53,7 @@
   :bind ("C-M-r" . er/expand-region))
 (use-package logview)
 (use-package all-the-icons)
+(use-package typescript-mode)
 (use-package neotree
   :bind ("C-' C-l" . neotree-toggle)
   :init
@@ -74,8 +75,7 @@
   ;; Enable custom neotree theme
   (doom-themes-neotree-config))  ; all-the-icons fonts must be installed!
 
-(use-package magit
-  :bind ("C-u" . magit-status))
+(use-package magit)
 
 (use-package company
   :init (global-company-mode))
@@ -92,6 +92,7 @@
         (define-key yaml-mode-map "\C-m" 'newline-and-indent))))
 
 ;; ---------------------------
+(cd "~/Projects/")
 
 ;; Misc
 (defalias 'yes-or-no-p 'y-or-n-p)              ; y/n instead of yes/no
@@ -178,10 +179,7 @@
  ("C-; '" . (lambda () (interactive)
               (select-window (split-window-below))
               (buffer-menu)))
- ("C-l ;" . delete-other-windows)
- ("C-l l" . delete-window)
- ("C-l o" . transpose-windows)
- ("C-o" . other-window)
+ ("C-l" . universal-argument)
  ("<escape>" . keyboard-escape-quit))
 
 (bind-keys :map isearch-mode-map
@@ -269,8 +267,8 @@
 
 ;; (global-set-key (kbd "C-v") 'move-to-window-line-top-bottom)
 
-;; (use-package ace-window
-;;   :bind ("C-o" .  ace-window))
+(use-package ace-window
+   :bind ("C-o" .  ace-window))
 
 (defun transpose-windows ()
    "Transpose two windows.  If more or less than two windows are visible, error."
@@ -285,11 +283,9 @@
      (set-window-buffer w1 w2b)
      (set-window-buffer w2 w1b)))
 
+
 ;; Text manipulation
 (defun toggle-comment-on-line ()
   "comment or uncomment current line"
   (interactive)
   (comment-or-uncomment-region (line-beginning-position) (line-end-position)))
-
-(global-set-key (kbd "M-c") 'kill-ring-save)
-(global-set-key (kbd "M-v") 'append-next-kill)
