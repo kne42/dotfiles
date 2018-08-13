@@ -186,6 +186,10 @@
            ("C-f" . isearch-repeat-forward)
            ("C-r" . isearch-repeat-backward))
 
+(bind-keys :map universal-argument-map
+           ("C-l" . universal-argument-more)
+           ("C-u" . nil))
+
 (defadvice keyboard-escape-quit (around my-keyboard-escape-quit activate)
   (let (orig-one-window-p)
     (fset 'orig-one-window-p (symbol-function 'one-window-p))
