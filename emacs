@@ -166,9 +166,9 @@
  ("M-w" . undo)
 
  ("M-r" . set-mark-command)
- ("C-M-f" . exchange-point-and-mark)
 
  ("M-f" . isearch-forward)
+ ("C-M-f" . replace-regexp)
 
  ("C-' C-'" .  buffer-menu)       ; Select a buffer from the list.
  ("C-' C-;" .  find-file)         ;
