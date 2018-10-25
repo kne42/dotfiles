@@ -78,7 +78,8 @@
 (use-package magit)
 
 (use-package company
-  :init (global-company-mode))
+  :init (global-company-mode)
+  :bind ("C-j" . company-complete))
 
 (use-package git-gutter
   :config
@@ -89,7 +90,15 @@
   (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
   :hook
   (yaml-mode-hook . (lambda ()
-        (define-key yaml-mode-map "\C-m" 'newline-and-indent))))
+                      (define-key yaml-mode-map "\C-m" 'newline-and-indent))))
+
+(use-package anaconda-mode
+  :hook python-mode-hook)
+
+(use-package company-jedi
+  :hook
+  (python-mode-hook . (lambda ()
+                        (add-to-list 'company-backends 'company-jedi))))
 
 ;; ---------------------------
 (cd "~/Projects/")
