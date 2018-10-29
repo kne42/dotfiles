@@ -14,7 +14,8 @@
     (interactive)
     (message "Installing all-the-icons icon fonts.")
     (all-the-icons-install-fonts :pfx))
-  (add-hook 'after-init-hook 'install-fonts))
+  (add-hook 'after-init-hook 'install-fonts)
+  (add-hook 'after-init-hook 'jedi:install-server))
 
 (eval-when-compile (require 'use-package))
 (setq use-package-always-ensure t)
@@ -89,16 +90,21 @@
   :config
   (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
   :hook
-  (yaml-mode-hook . (lambda ()
+  (yaml-mode . (lambda ()
                       (define-key yaml-mode-map "\C-m" 'newline-and-indent))))
 
 (use-package anaconda-mode
-  :hook python-mode-hook)
+  :hook python-mode)
+
+(use-package exec-path-from-shell
+  :init
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
 
 (use-package company-jedi
   :hook
-  (python-mode-hook . (lambda ()
-                        (add-to-list 'company-backends 'company-jedi))))
+  (python-mode . (lambda ()
+                   (add-to-list 'company-backends 'company-jedi))))
 
 ;; ---------------------------
 (cd "~/Projects/")
