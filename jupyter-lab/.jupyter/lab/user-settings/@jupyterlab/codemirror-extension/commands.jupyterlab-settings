@@ -1,0 +1,7 @@
+{
+    "keyMap": "emacs",
+    "extraKeys": {
+      "Ctrl-Alt-s": "selectAll",
+      "Ctrl-x": "selectAl"
+    }
+}

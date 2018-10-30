@@ -1,0 +1,53 @@
+{
+  "Notebook": {
+    "Toolbar": false
+  },
+  "keys": {
+    "command": {
+      "unbind": [
+        "shift-enter",
+        "k",
+        "up",
+        "j",
+        "down",
+        "alt-enter",
+        "x",
+        "c",
+        "space",
+        "shift-space",
+        "a",
+        "b"
+      ],
+      "bind": {
+        "ctrl-x-ctrl-s": "jupyter-notebook:save-notebook",
+        "ctrl-x,ctrl-s": "jupyter-notebook:save-notebook",
+        "ctrl-d": "jupyter-notebook:run-cell-and-select-next",
+        "ctrl-e": "jupyter-notebook:run-cell-and-insert-below",
+        "alt-w": "jupyter-notebook:insert-cell-above",
+        "ctrl-x,h": "jupyter-notebook:show-keyboard-shortcuts",
+        "ctrl-alt-s": "jupyter-notebook:cut-cell",
+        "ctrl-alt-w": "jupyter-notebook:paste-cell-below",
+        "ctrl-x,ctrl-w": "jupyter-notebook:rename-notebook",
+        "ctrl-x,r": "jupyter-notebook:clear-all-cells-output",
+        "ctrl-x,ctrl-r": "jupyter-notebook:restart-kernel-and-run-all-cells",
+        "ctrl-x,ctrl-c": "jupyter-notebook:toggle-cell-line-numbers",
+        "ctrl-w": "jupyter-notebook:select-previous-cell",
+        "ctrl-s": "jupyter-notebook:select-next-cell",
+        "ctrl-r": "jupyter-notebook:toggle-cell-output-collapsed",
+        "alt-s": "jupyter-notebook:insert-cell-below",
+        "alt-r": "jupyter-notebook:move-cell-up",
+        "alt-f": "jupyter-notebook:move-cell-down",
+        "esc": "jupyter-notebook:enter-command-mode"
+      }
+    }
+  },
+  "Cell": {
+    "cm_config": {
+      "lineNumbers": false
+    }
+  },
+  "load_extensions": {
+    "jupyter_emacskeys/init": true,
+    "jupyter-emacskeys": true
+  }
+}
