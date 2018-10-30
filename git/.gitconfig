@@ -1,0 +1,8 @@
+[user]
+	name = Kira Evans
+	email = contact@kne42.me
+[github]
+	user = kne42
+[core]
+	editor = nano
+	excludesfile = ~/.gitignore_global
