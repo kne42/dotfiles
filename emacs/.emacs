@@ -21,17 +21,17 @@
 (setq use-package-always-ensure t)
 (setq vc-follow-symlinks t)
 
-;(if (require 'quelpa nil t)
-;    (quelpa-self-upgrade)
-;  (with-temp-buffer
-;    (url-insert-file-contents "https://raw.github.com/quelpa/quelpa/master/bootstrap.el")
-;    (eval-buffer)))
+(if (require 'quelpa nil t)
+    (quelpa-self-upgrade)
+  (with-temp-buffer
+    (url-insert-file-contents "https://raw.github.com/quelpa/quelpa/master/bootstrap.el")
+    (eval-buffer)))
 
-;(quelpa
-; '(quelpa-use-package
-;   :fetcher github
-;   :repo "quelpa/quelpa-use-package"))
-;(require 'quelpa-use-package)
+(quelpa
+ '(quelpa-use-package
+   :fetcher github
+   :repo "quelpa/quelpa-use-package"))
+(require 'quelpa-use-package)
 
 (setq custom-file "~/.emacs.d/custom.el")
 (unless (file-exists-p custom-file)
@@ -77,15 +77,23 @@
   ;; Enable custom neotree theme
   (doom-themes-neotree-config))  ; all-the-icons fonts must be installed!
 
-(use-package magit)
+(use-package magit
+  :bind ("C-g" . magit-status))
 
 (use-package company
   :init (global-company-mode)
   :bind ("C-j" . company-complete))
 
-(use-package git-gutter
-  :config
-  (global-git-gutter-mode +1))
+(use-package company-jedi
+  :hook
+  (python-mode . (lambda ()
+                   (add-to-list 'company-backends 'company-jedi))))
+
+(use-package diff-hl
+  :init
+  (global-diff-hl-mode)
+  :hook
+  (magit-post-refresh . diff-hl-magit-post-refresh))
 
 (use-package yaml-mode
   :config
@@ -102,14 +110,6 @@
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize)))
 
-(use-package company-jedi
-  :hook
-  (python-mode . (lambda ()
-                   (add-to-list 'company-backends 'company-jedi))))
-
-;; ---------------------------
-(cd "~/Projects/")
-
 ;; Misc
 (defalias 'yes-or-no-p 'y-or-n-p)              ; y/n instead of yes/no
 (setq-default indent-tabs-mode nil)
@@ -117,7 +117,8 @@
 
 (add-to-list 'magic-mode-alist '("<!DOCTYPE html>" . (lambda() (if (not (boundp 'html-mode)) (html-mode)))))
 
-(use-package which-key)
+(use-package which-key
+  :init (which-key-mode))
 
 (use-package scss-mode
   :custom
