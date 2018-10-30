@@ -1,8 +1,26 @@
 [user]
 	name = Kira Evans
 	email = contact@kne42.me
+
 [github]
 	user = kne42
+
 [core]
 	editor = nano
 	excludesfile = ~/.gitignore_global
+
+[merge]
+	log = true
+
+[push]
+	followTags = true
+
+[url "git@github.com:"]
+	insteadOf = "gh-priv:"
+	pushInsteadOf = "gh:"
+	pushInsteadOf = "git://github.com/"
+	pushInsteadOf = "https://github.com/"
+
+[url "git://github.com/"]
+	insteadOf = "gh:"
+	insteadOf = "https://github.com/"
