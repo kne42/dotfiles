@@ -19,6 +19,7 @@
 
 (eval-when-compile (require 'use-package))
 (setq use-package-always-ensure t)
+(setq vc-follow-symlinks t)
 
 ;(if (require 'quelpa nil t)
 ;    (quelpa-self-upgrade)
