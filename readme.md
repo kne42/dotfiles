@@ -1,2 +1,4 @@
-# After Install Configuration
-`M-x all-the-icons-install-fonts`
+Uses GNU Stow to manage dotfiles:
+```
+stow {folder}
+```
