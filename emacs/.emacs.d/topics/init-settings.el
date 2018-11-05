@@ -51,12 +51,10 @@
    sentence-end-double-space nil            ; sentences end with one space
    truncate-partial-width-windows nil       ; don't truncate long lines
    require-final-newline t                  ; add newline at the end of every file
-   global-linum-mode t                      ; show line numbers on buffers
    column-number-mode t                     ; show column number in the mode-line
    show-paren-mode t                        ; highlight parenthesis pairs
    blink-matching-paren-distance nil        ; no blinking parenthesis
    read-file-name-completion-ignore-case t  ; ignore case when completing file names
-   icomplete-mode t                         ; minibuffer completion
    read-buffer-completion-ignore-case t)    ; ignore case when completing minibuffer
 
   (setq-default
@@ -66,23 +64,26 @@
 
   (defalias 'yes-or-no-p 'y-or-n-p)         ; y/n instead of yes/no
 
-  (defvar delete-trailing-on-save t)        ; Delete trailing whitespaces on save.
+  (defvar delete-trailing-on-save t)        ; delete trailing whitespaces on save
 
   (provide 'kne42-settings)
 
+  :custom
+  (icomplete-mode t)                         ; minibuffer completion
+
   :hook
   (before-save-hook . (lambda () (when delete-trailing-on-save
-                                   (delete-trailing-whitespace)))))
+                                   (delete-trailing-whitespace))))
 
-:config
-;; app
-(if (display-graphic-p)
-    (setq tool-bar-mode -1                  ; no toolbar
-          menu-bar-mode -1                  ; no menubar
-          set-scroll-bar-mode 'right        ; set scrollbar right
-          scroll-bar-mode -1                ; disable scrollbar
-          scroll-preserve-screen-position t ; scroll without moving cursor
-          mouse-wheel-mode nil))            ; mouse-wheel disabled
+  :config
+  ;; app
+  (if (display-graphic-p)
+      (setq tool-bar-mode -1                  ; no toolbar
+            menu-bar-mode -1                  ; no menubar
+            set-scroll-bar-mode 'right        ; set scrollbar right
+            scroll-bar-mode -1                ; disable scrollbar
+            scroll-preserve-screen-position t ; scroll without moving cursor
+            mouse-wheel
 
-
+            
 (provide 'init-settings)
