@@ -26,10 +26,6 @@
 (straight-use-package
  '(use-package :host github :repo "jwiegley/use-package"))
 
-;; default to lazy loading
-;; can be overridden by `:demand' keyword
-(setq use-package-always-defer t)
-
 
 ;; configuration topic files
 (defconst topics-dir
@@ -74,21 +70,25 @@
 ;; display
 ;; `use-package' integration: `:diminish'
 (use-package diminish
-  :straight (:host github :repo "myrjola/diminish.el")
-  :demand)
+  :straight (:host github :repo "myrjola/diminish.el"))
 
 
 ;; `el-patch' provides on-the-fly patching of functions from other packages
 ;; via sexp-based diffs
 ;; `use-package' integration: `:init/el-patch', `:config/el-patch'
 (use-package el-patch
-  :straight (:host github :repo "raxod502/el-patch" :branch "develop")
-  :demand)
+  :straight (:host github :repo "raxod502/el-patch" :branch "develop"))
 
 
 ;;-----------------------------------------------------------------------------
 ;; Topic Loading
 ;;-----------------------------------------------------------------------------
 
-;; `settings' provides global settings, advice, and keybindings
-(require 'init-settings)
+;; `settings' provides global settings and advice for built-in libraries
+(use-package init-settings)
+
+;; `keybindings' provides global keybindings
+(use-package init-keybindings)
+
+;; `display' provides themes, mode-lines, and other visual elements
+(use-package init-display)
