@@ -21,24 +21,28 @@
 (setq use-package-always-ensure t)
 (setq vc-follow-symlinks t)
 
-(if (require 'quelpa nil t)
-    (quelpa-self-upgrade)
-  (with-temp-buffer
-    (url-insert-file-contents "https://raw.github.com/quelpa/quelpa/master/bootstrap.el")
-    (eval-buffer)))
+;; (setq use-package-ensure-function 'quelpa)
+;;
+;; (if (require 'quelpa nil t)
+;;     (quelpa-self-upgrade)
+;;   (with-temp-buffer
+;;     (url-insert-file-contents "https://raw.github.com/quelpa/quelpa/master/bootstrap.el")
+;;     (eval-buffer)))
 
-(quelpa
- '(quelpa-use-package
-   :fetcher github
-   :repo "quelpa/quelpa-use-package"))
-(require 'quelpa-use-package)
+;; (quelpa
+;;  '(quelpa-use-package
+;;    :fetcher github
+;;    :repo "quelpa/quelpa-use-package"))
+;; (require 'quelpa-use-package)
 
-(setq custom-file "~/.emacs.d/custom.el")
+                                        ; write all the "custom-variable" junk to here
+(setq custom-file
+      (concat user-emacs-directory "custom.el"))
 (unless (file-exists-p custom-file)
-  (make-directory "~/.emacs.d" :parents)
   (with-temp-buffer (write-file custom-file)))
 
 (load custom-file)
+
 
 ; -------------- Package Initialization --------------
 
@@ -90,10 +94,18 @@
                    (add-to-list 'company-backends 'company-jedi))))
 
 (use-package diff-hl
+  :disabled  ; laggy
   :init
   (global-diff-hl-mode)
   :hook
   (magit-post-refresh . diff-hl-magit-post-refresh))
+
+(use-package git-gutter
+  :init
+  (global-git-gutter-mode))
+
+(use-package git-gutter-fringe
+  :requires git-gutter)
 
 (use-package yaml-mode
   :config
@@ -101,6 +113,10 @@
   :hook
   (yaml-mode . (lambda ()
                       (define-key yaml-mode-map "\C-m" 'newline-and-indent))))
+
+(use-package aggressive-indent
+  :config
+  (global-aggressive-indent-mode))
 
 (use-package anaconda-mode
   :hook python-mode)
