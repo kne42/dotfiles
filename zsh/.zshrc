@@ -97,7 +97,11 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-export PATH="$HOME/.conda/bin:$PATH"
+source ~/.conda/etc/profile.d/conda.sh
+conda activate
+
+PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"
+MANPATH="/usr/local/opt/gnu-tar/libexec/gnuman:$MANPATH"
 export SSH_KEY_PATH="~/.ssh/id_rsa"
 
 PREV=$(pwd)
