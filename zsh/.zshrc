@@ -129,9 +129,6 @@ alias sudo="sudo "
 
 if [ -z ${ORIG_EMACS+x} ]; then ORIG_EMACS=$(which emacs); fi
 alias emacs-=$ORIG_EMACS
-function emacs-background {
-        ( $ORIG_EMACS $@ & ) > /dev/null 2>&1;
-}
-alias emacs=emacs-background
+alias emacs="rm -f ~/Library/Colors/Emacs.clr; $ORIG_EMACS"
 
 source ~/.zsh_local
