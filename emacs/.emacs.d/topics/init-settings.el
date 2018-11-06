@@ -47,13 +47,17 @@
    mouse-yank-at-point t                    ; paste at cursor position
    sentence-end-double-space nil            ; sentences end with one space
    truncate-partial-width-windows nil       ; don't truncate long lines
-   column-number-mode t)                     ; show column number in the mode-line
+   column-number-mode t)                    ; show column number in the mode-line
 
   (setq-default
    indicate-empty-lines t                   ; show empty lines
    indent-tabs-mode nil                     ; use spaces instead of tabs
    tab-width 4)                             ; tab length
 
+  (setq initial-buffer-choice ((lambda () (if (eq (length command-line-args) 1)
+                                              default-directory
+                                            nil))))
+  
   :config
   ;; app
   (if (display-graphic-p)
