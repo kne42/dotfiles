@@ -1,5 +1,5 @@
 (use-package bind-key
-  ; :straight (:host github :repo "jwiegley/use-package")
+  :straight (:host github :repo "jwiegley/use-package" :files ("bind-key.el"))
 
   :init
   (keyboard-translate ?\C-i ?\H-i)
@@ -40,7 +40,7 @@
    ;; general utilities
    ("M-r" . set-mark-command)
 
-   ("C-/" . comment-uncomment-region)
+   ("C-/" . comment-or-uncomment-region)
 
    ("M-f" . isearch-forward)
    ("C-M-f" . replace-regexp)

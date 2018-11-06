@@ -1,2 +1,3 @@
 emacs/.emacs.d/straight
 emacs/.emacs.d/auto-save-list
+emacs/.emacs.d/.*

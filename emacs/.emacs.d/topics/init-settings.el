@@ -67,18 +67,6 @@
   :config
   (show-paren-mode t))
 
-;; `icomplete' provides minibuffer completion
-(use-package icomplete
-  :init
-  (use-package minibuffer
-    :init
-    (setq read-buffer-completion-ignore-case t)    ; ignore case when completing buffer names
-    :config
-    (setq read-file-name-completion-ignore-case t)) ; ignore case when completing file names
-
-  :config
-  (icomplete-mode t))
-
 ;; `hl-line' highlights the current line
   (use-package hl-line
     :config
@@ -97,14 +85,31 @@
   (set-scroll-bar-mode 'right)        ; set scrollbar right
   (scroll-bar-mode -1))                ; disable scrollbar
 
+(use-package smooth-scrolling
+  :straight (:host github :repo "aspiers/smooth-scrolling")
+  :after scroll-bar
+  :init (setq smooth-scroll-margin 20)
+  :config (smooth-scrolling-mode 1))
+
+(use-package aggressive-indent
+  :straight (:host github :repo "Malabarba/aggressive-indent-mode")
+  :config
+  (global-aggressive-indent-mode))
+
+(use-package exec-path-from-shell
+  :straight (:host github :repo "purcell/exec-path-from-shell")
+  :if (memq window-system '(mac ns x))
+  :init
+  (exec-path-from-shell-initialize))
+
+(use-package ace-window
+  :straight (:host github :repo "abo-abo/ace-window")
+  :bind ("C-o" .  ace-window))
+
 (use-package mwheel
   :if (display-graphic-p)
   :config
   (mouse-wheel-mode nil))           ; mouse-wheel disabled
-
-(use-package vc-hooks
-  :config
-  (setq vc-follow-symlinks t))                     ; follow symlinks to their targets
 
 (use-package frame
   :init
@@ -129,6 +134,10 @@
   (provide 'subr)
   :config
   (defalias 'yes-or-no-p 'y-or-n-p))         ; y/n instead of yes/no
+
+(use-package autorevert
+  :config
+  (global-auto-revert-mode t))
 
 
 (provide 'init-settings)

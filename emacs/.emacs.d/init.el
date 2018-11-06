@@ -23,6 +23,7 @@
 
 ;; install `use-package' macro
 ;; provides the keyword `:straight'
+(setq use-package-compute-statistics t)
 (straight-use-package
  '(use-package :host github :repo "jwiegley/use-package"))
 
@@ -92,3 +93,10 @@
 
 ;; `display' provides themes, mode-lines, and other visual elements
 (use-package init-display)
+
+(use-package init-vc)
+
+(use-package init-modes)
+
+(use-package init-completions)
+
