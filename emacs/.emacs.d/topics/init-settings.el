@@ -39,6 +39,7 @@
        (list (line-beginning-position) (line-beginning-position 2)))))
 
   (setq
+   inhibit-startup-screen t                 ; disable startup message
    load-prefer-newer t                      ; prefer newer .el over .elc
    kill-ring-max 5000                       ; truncate kill ring at 5000 entries
    mark-ring-max 5000                       ; truncate mark ring at 5000 entries
@@ -99,7 +100,8 @@
 (use-package exec-path-from-shell
   :straight (:host github :repo "purcell/exec-path-from-shell")
   :if (memq window-system '(mac ns x))
-  :init
+  :config
+  (delete "-i" exec-path-from-shell-arguments)
   (exec-path-from-shell-initialize))
 
 (use-package ace-window
