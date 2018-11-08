@@ -24,6 +24,7 @@
    ;; deletion
    ("H-i" . delete-indentation)
    ("C-M-s" . kill-region)
+   ("M-c" . kill-ring-save)
    ("M-s" . kill-line)
    ("C-M-x" . append-next-kill)
 

@@ -128,7 +128,8 @@ eval $(thefuck --alias)
 alias sudo="sudo "
 
 if [ -z ${ORIG_EMACS+x} ]; then ORIG_EMACS=$(which emacs); fi
-alias emacs-=$ORIG_EMACS
+alias emacs+=$ORIG_EMACS
 alias emacs="rm -f ~/Library/Colors/Emacs.clr; $ORIG_EMACS"
+alias emacs-="emacs -nw"
 
 source ~/.zsh_local

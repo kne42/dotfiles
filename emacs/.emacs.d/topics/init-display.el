@@ -19,14 +19,22 @@
 (use-package spaceline-all-the-icons
   :straight (:host github :repo "domtronn/spaceline-all-the-icons.el")
   :after (spaceline all-the-icons)
-  :config (spaceline-all-the-icons-theme))
+  ;; :unless *minimize-startup*
+  :init
+  (message "2")
+  (message
+   (if *minimize-startup*
+       "yes"
+     "no"))
+  :config
+  (spaceline-all-the-icons-theme))
 
 (use-package doom-themes
   :straight (:host github :repo "hlissner/emacs-doom-themes"
                    :files (:defaults "themes/*.el"))
   :init
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-	doom-themes-enable-italic t) ; if nil, italics is universally disabled
+	    doom-themes-enable-italic t) ; if nil, italics is universally disabled
   :config
   (load-theme 'doom-one t)
   ;; Enable flashing mode-line on errors

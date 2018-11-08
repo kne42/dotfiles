@@ -67,6 +67,16 @@
   "Is this running from a terminal?")
 
 
+(defvar *minimize-startup* nil
+  "Did emacs get passed the --minimize-startup argument?")
+
+(add-to-list 'command-switch-alist
+             '("--minimize-startup"
+               . (lambda (switch)
+                   (setq *minimize-startup* t))))
+(message "1")
+
+
 ;; `diminish' provides diminishing of minor modes by removing their modeline
 ;; display
 ;; `use-package' integration: `:diminish'
@@ -92,7 +102,7 @@
 (use-package init-keybindings)
 
 ;; `display' provides themes, mode-lines, and other visual elements
-(use-package init-display)
+(require 'init-display)
 
 (use-package init-vc)
 

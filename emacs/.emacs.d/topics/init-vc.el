@@ -10,7 +10,14 @@
                            "Documentation/magit.texi"
                            "Documentation/AUTHORS.md"
                            "LICENSE"))
+  :commands magit-status
   :bind ("C-g" . magit-status))
+
+(use-package vc-git
+  :disabled
+  :config
+  (when (vc-git-responsible-p default-directory)
+    (magit-status default-directory)))
 
 (use-package diff-hl
   :disabled  ; laggy

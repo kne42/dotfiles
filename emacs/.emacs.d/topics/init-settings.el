@@ -49,14 +49,14 @@
    truncate-partial-width-windows nil       ; don't truncate long lines
    column-number-mode t)                    ; show column number in the mode-line
 
+  (setq initial-buffer-choice ((lambda () (if (eq (length command-line-args) 1)
+                                              default-directory
+                                            nil))))
+  
   (setq-default
    indicate-empty-lines t                   ; show empty lines
    indent-tabs-mode nil                     ; use spaces instead of tabs
    tab-width 4)                             ; tab length
-
-  (setq initial-buffer-choice ((lambda () (if (eq (length command-line-args) 1)
-                                              default-directory
-                                            nil))))
   
   :config
   ;; app
@@ -73,9 +73,9 @@
   (show-paren-mode t))
 
 ;; `hl-line' highlights the current line
-  (use-package hl-line
-    :config
-    (global-hl-line-mode t))
+(use-package hl-line
+  :config
+  (global-hl-line-mode t))
 
 ;; modifying text replaces the region
 (use-package delsel
@@ -111,6 +111,10 @@
 (use-package ace-window
   :straight (:host github :repo "abo-abo/ace-window")
   :bind ("C-o" .  ace-window))
+
+(use-package expand-region
+  :straight (:host github :repo "magnars/expand-region.el")
+  :bind ("C-M-c" . er/expand-region))
 
 (use-package mwheel
   :if (display-graphic-p)
