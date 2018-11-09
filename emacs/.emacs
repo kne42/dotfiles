@@ -28,6 +28,59 @@
  '(use-package :host github :repo "jwiegley/use-package"))
 
 
+;;;; https://github.com/raxod502/radian/blob/develop/emacs/radian.el
+;;; Prevent Emacs-provided Org from being loaded
+
+;; The following is a temporary hack until straight.el supports
+;; building Org, see:
+;;
+;; * https://github.com/raxod502/straight.el/issues/211
+;; * https://github.com/raxod502/radian/issues/410
+;;
+;; There are three things missing from our version of Org: the
+;; functions `org-git-version' and `org-release', and the feature
+;; `org-version'. We provide all three of those ourself, therefore.
+
+;; `git' provides convenience functions for running Git.
+(use-package git
+  :straight (:host github :repo "rejeep/git.el"))
+
+(defun org-git-version ()
+  "The Git version of org-mode.
+  Inserted by installing org-mode or when a release is made."
+  (require 'git)
+  (let ((git-repo (expand-file-name
+                   "straight/repos/org/" user-emacs-directory)))
+    (string-trim
+     (git-run "describe"
+              "--match=release\*"
+              "--abbrev=6"
+              "HEAD"))))
+
+(defun org-release ()
+  "The release version of org-mode.
+  Inserted by installing org-mode or when a release is made."
+  (require 'git)
+  (let ((git-repo (expand-file-name
+                   "straight/repos/org/" user-emacs-directory)))
+    (string-trim
+     (string-remove-prefix
+      "release_"
+      (git-run "describe"
+               "--match=release\*"
+               "--abbrev=0"
+               "HEAD")))))
+
+(provide 'org-version)
+
+;; Our real configuration for Org comes much later. Doing this now
+;; means that if any packages that are installed in the meantime
+;; depend on Org, they will not accidentally cause the Emacs-provided
+;; (outdated and duplicated) version of Org to be loaded before the
+;; real one is registered.
+(straight-use-package 'org)
+
+
 ;;-----------------------------------------------------------------------------
 ;; General Utilities
 ;;-----------------------------------------------------------------------------
@@ -68,6 +121,14 @@
 (defun no-args-p ()
   (or (eq (length command-line-args) 1)
       (and (eq (length command-line-args) 2) (minimize-startup-p))))
+
+
+;; https://emacs.stackexchange.com/a/30032
+(defmacro with-suppressed-message (&rest body)
+  "Suppress new messages temporarily in the echo area and the `*Messages*' buffer while BODY is evaluated."
+  (declare (indent 0))
+  (let ((message-log-max nil))
+    `(with-temp-message (or (current-message) "") ,@body)))
 
 
 ;; `diminish' provides diminishing of minor modes by removing their modeline
@@ -117,6 +178,11 @@
       (progn (tool-bar-mode -1)                  ; no toolbar
              (menu-bar-mode -1))))                  ; no menubar
 
+(diminish 'eldoc-mode)
+
+(use-package prog-mode
+  :config
+  (unbind-key "C-M-Q" prog-mode-map))
 
 ;; `paren' highlights matching parenthesis pairs
 (use-package paren
@@ -181,10 +247,13 @@
   :init (setq smooth-scroll-margin 20)
   :config (smooth-scrolling-mode 1))
 
-(use-package aggressive-indent
-  :straight (:host github :repo "Malabarba/aggressive-indent-mode")
-  :hook
-  (emacs-lisp-mode . global-aggressive-indent-mode))
+(use-package elisp-mode
+  :config
+  (unbind-key "C-M-q" emacs-lisp-mode-map)
+  (use-package aggressive-indent
+    :straight (:host github :repo "Malabarba/aggressive-indent-mode")
+    :hook
+    (emacs-lisp-mode . global-aggressive-indent-mode)))
 
 (use-package exec-path-from-shell
   :straight (:host github :repo "purcell/exec-path-from-shell")
@@ -201,6 +270,31 @@
   :straight (:host github :repo "magnars/expand-region.el")
   :bind ("C-M-c" . er/expand-region))
 
+
+(use-package realgud
+  :straight (:host github :repo "realgud/realgud"
+                   :files ("realgud.el"
+                           ("realgud/common" "realgud/common/*.el")
+                           ("realgud/common/buffer" "realgud/common/buffer/*.el")
+                           ("realgud/debugger/bashdb" "realgud/debugger/bashdb/*.el")
+                           ("realgud/debugger/gdb" "realgud/debugger/gdb/*.el")
+                           ("realgud/debugger/gub" "realgud/debugger/gub/*.el")
+                           ("realgud/debugger/ipdb" "realgud/debugger/ipdb/*.el")
+                           ("realgud/debugger/jdb" "realgud/debugger/jdb/*.el")
+                           ("realgud/debugger/kshdb" "realgud/debugger/kshdb/*.el")
+                           ("realgud/debugger/nodejs" "realgud/debugger/nodejs/*.el")
+                           ("realgud/debugger/pdb" "realgud/debugger/pdb/*.el")
+                           ("realgud/debugger/perldb" "realgud/debugger/perldb/*.el")
+                           ("realgud/debugger/rdebug" "realgud/debugger/rdebug/*.el")
+                           ("realgud/debugger/remake" "realgud/debugger/remake/*.el")
+                           ("realgud/debugger/trepan" "realgud/debugger/trepan/*.el")
+                           ("realgud/debugger/trepan.pl" "realgud/debugger/trepan.pl/*.el")
+                           ("realgud/debugger/trepan2" "realgud/debugger/trepan2/*.el")
+                           ("realgud/debugger/trepan3k" "realgud/debugger/trepan3k/*.el")
+                           ("realgud/debugger/trepanjs" "realgud/debugger/trepanjs/*.el")
+                           ("realgud/debugger/zshdb" "realgud/debugger/zshdb/*.el")
+                           ("realgud/lang" "realgud/lang/*.el")))
+  :defer)
 
 ;;-----------------------------------------------------------------------------
 ;; Keybindings
@@ -253,7 +347,7 @@
 
   
   :config
-  (bind-keys*
+  (bind-keys
    ;; movement
    ("C-w" . previous-line)
    ("C-s" . next-line)
@@ -335,11 +429,17 @@
   ;; Enable custom neotree theme
   (doom-themes-neotree-config))  ; all-the-icons fonts must be installed!)
 
+(use-package powerline
+  :straight (:host github :repo "milkypostman/powerline"))
+
 (use-package spaceline-config
   :straight (spaceline :host github :repo "TheBB/spaceline")
+  :after powerline
   :config
+  ;; `spaceline-all-the-icons' adds a high startup time
+  ;; and is laggy in the presence of `diff-hl'
   (if (minimize-startup-p)
-      (spaceline-install)
+      (spaceline-spacemacs-theme)
     (use-package spaceline-all-the-icons
       :straight (:host github :repo "domtronn/spaceline-all-the-icons.el")
       :config
@@ -377,6 +477,7 @@
 ;; `company' provides general text completion
 (use-package company
   :straight (:host github :repo "company-mode/company-mode")
+  :diminish
   :init (global-company-mode)
   :bind
   ("C-j" . company-complete)
@@ -384,14 +485,20 @@
         ("<escape>" . company-abort)
         ("C-w" . company-select-previous-or-abort)
         ("C-s" . company-select-next-or-abort)
-        ("C-f" . company-search-candidates)
-        ("M-f" . company-show-location)
+        ("M-f" . company-search-candidates)
+        ("C-M-f" . company-show-location)
         ("C-j" . company-complete-common)))
 
 ;; `which-key' provides keybinding completion help
 (use-package which-key
   :straight (:host github :repo "justbur/emacs-which-key")
+  :diminish
   :init (which-key-mode))
+
+(use-package flycheck
+  :straight (:host github :repo "flycheck/flycheck")
+  :diminish
+  :init (global-flycheck-mode))
 
 
 ;;-----------------------------------------------------------------------------
@@ -411,7 +518,33 @@
                            "Documentation/AUTHORS.md"
                            "LICENSE"))
   :commands magit-status
-  :bind ("C-g" . magit-status))
+  
+  :bind
+  (("C-g" . magit-status)
+   :map magit-mode-map
+   ("C-w" . nil)
+   ("C-f" . magit-section-forward)
+   ("C-r" . magit-section-backward)
+   ([remap kill-region] . magit-copy-section-value)
+   ([remap keyboard-escape-quit] . magit-mode-bury-buffer))
+  :custom
+  (magit-log-arguments '("-n256"
+                         "--graph"
+                         "--color"
+                         "--decorate")))
+
+(use-package magit-gh-pulls
+  :disabled
+  :straight (:host github :repo "sigma/magit-gh-pulls")
+  :hook (magit-mode . turn-on-magit-gh-pulls))
+
+(use-package magithub
+  :disabled
+  :straight (:host github :repo "vermiculus/magithub")
+  :after magit
+  :config
+  (magithub-feature-autoinject t)
+  (setq magithub-clone-default-directory "~/Projects"))
 
 (use-package vc-git
   :disabled
@@ -421,18 +554,21 @@
     (magit-status default-directory)))
 
 (use-package diff-hl
-  :disabled  ; laggy
-
   :straight (:host github :repo "dgutov/diff-hl")
+  :if (minimize-startup-p)
   :init
   (global-diff-hl-mode)
   :hook
+  (flycheck-mode      . diff-hl-flydiff-mode)
+  (dired-mode         . diff-hl-dired-mode)
   (magit-post-refresh . diff-hl-magit-post-refresh))
 
 (use-package git-gutter
   :straight (:host github :repo "syohex/emacs-git-gutter")
-  :hook
-  (vc-mode-hook . global-git-gutter-mode))
+  :unless (minimize-startup-p)
+  :diminish
+  :init
+  (global-git-gutter-mode))
 
 (use-package git-gutter-fringe
   :straight (:host github :repo "syohex/emacs-git-gutter-fringe")
@@ -443,47 +579,98 @@
 ;; Python
 ;;-----------------------------------------------------------------------------
 
-(eval-after-load 'exec-path-from-shell
+(eval-after-load 'exec-path-from-shell  ; for `:if' to take effect
   (use-package python
     :if (executable-find "python")
-    :mode ("\\.py\\'" . python-mode)
+    :mode (("\\.py\\'" . python-mode)
+           ("\\.pyi\\'" . python-mode))
     :interpreter ("python[0-9.]*" . python-mode)
-
-    :commands python-replace-doc
-    :bind (:map python-mode-map
-                ("C-c C-M-F" . python-replace-doc))
 
     :init
     (use-package anaconda-mode
       :straight (:host github :repo "proofit404/anaconda-mode")
-      :hook python-mode)
+      :diminish
+      :hook python-mode
+      :bind (:map python-mode-map
+                  ("C-c M-r" . anaconda-mode-find-references))
+      :config
+      (unbind-key "M-r" anaconda-mode-map))
 
     (use-package company-jedi
       :straight (:host github :repo "syohex/emacs-company-jedi")
       :after company
+      :bind (:map python-mode-map
+                  ("C-c C-?" . jedi:show-doc))
       :hook
       (python-mode . (lambda ()
                        (add-to-list 'company-backends 'company-jedi))))
+
+    (use-package pyvenv
+      :straight (:host github :repo "jorgenschaefer/pyvenv")
+      :hook (python-mode . pyvenv-mode)
+      :bind (:map python-mode-map
+                  ("C-c a" . conda-activate)
+                  ("C-c d" . conda-deactivate))
+      :config
+      ;; TODO: make our own wrappers instead of using `WORKON_HOME'
+      (setenv "WORKON_HOME" "~/.conda/envs")
+      (defalias 'conda-activate 'pyvenv-workon)
+      (defalias 'conda-deactivate 'pyvenv-deactivate)
+      ;; properly make `jedi' use the right venv
+      (add-hook 'pyvenv-post-activate-hooks '(lambda ()
+                                               (with-suppressed-message
+                                                 (jedi:stop-server)))))
     
+    (use-package python-pytest
+      :straight (:host github :repo "wbolster/emacs-python-pytest")
+      :demand
+      :custom
+      (python-pytest-arguments
+       '("--color"
+         "--doctest-modules"
+         "--showlocals"
+         "--verbose"
+         "--failed-first"))
+      :bind (:map python-mode-map
+                  ("C-C p" . python-pytest-popup)))
+
+    (use-package flycheck-pycheckers
+      :straight (:host github :repo "msherry/flycheck-pycheckers"
+                       :files (:defaults ("bin" "bin/pycheckers.py")))
+      :after (flycheck pyvenv)
+      :defines flycheck-pycheckers-checkers
+      :custom
+      (flycheck-pycheckers-checkers '(flake8 mypy3))
+      (flycheck-pycheckers-venv-root (getenv "WORKON_HOME"))
+      :hook (flycheck-mode . flycheck-pycheckers-setup)
+      :config
+      (add-to-list 'flycheck-pycheckers-ignore-codes "W503"))
+
+    :bind (:map python-mode-map
+                ("C-c C-M-f" . python-replace-doc))
+
     :config
+    (setq python-shell-interpreter "ipython"
+          python-shell-interpreter-args "--simple-prompt -i")
+    
     ;; TODO: perform replace multiple times in same docstring
     (defun python-replace-doc (regexp to-string &optional delimited start end backward)
       (declare (interactive-only
                 "use `re-search-forward' and `replace-match' instead."))
       (interactive
        (let ((common
-	          (query-replace-read-args
-	           (concat "Replace"
-		               (if current-prefix-arg
-		                   (if (eq current-prefix-arg '-) " backward" " word")
-		                 "")
-		               " regexp for docstrings"
-		               (if (use-region-p) " in region" ""))
-	           t)))
+              (query-replace-read-args
+               (concat "Replace"
+                       (if current-prefix-arg
+                           (if (eq current-prefix-arg '-) " backward" " word")
+                         "")
+                       " regexp for docstrings"
+                       (if (use-region-p) " in region" ""))
+               t)))
          (list (nth 0 common) (nth 1 common) (nth 2 common)
-	           (if (use-region-p) (region-beginning))
-	           (if (use-region-p) (region-end))
-	           (nth 3 common))))
+               (if (use-region-p) (region-beginning))
+               (if (use-region-p) (region-end))
+               (nth 3 common))))
       (perform-replace (concat "\\(?8:\"\"\"[[:ascii:]]*\\)"
                                regexp
                                "\\(?9:[[:ascii:]]*\"\"\"\\)")
@@ -491,6 +678,24 @@
                                to-string
                                "\\9")
                        nil t delimited nil nil start end backward))))
+
+
+;;-----------------------------------------------------------------------------
+;; Common C
+;;-----------------------------------------------------------------------------
+
+(use-package cc-mode
+  :init
+  (use-package meghanada
+    :straight (:host github :repo "mopemope/meghanada-emacs")
+    :hook (java-mode . meghanada-mode)
+    :config
+    (setq c-basic-offset 2)
+    (add-hook 'before-save-hook 'meghanada-code-beautify-before-save)
+    (unbind-key "C-d" java-mode-map)
+    (unbind-key "C-M-q" java-mode-map)
+    (unbind-key "C-M-a" java-mode-map)
+    (unbind-key "C-M-e" java-mode-map)))
 
 
 ;;-----------------------------------------------------------------------------
@@ -514,4 +719,25 @@
 
 (use-package markdown-mode
   :straight (:host github :repo "jrblevin/markdown-mode")
-  :mode "\\.md\\'")
+  :mode "\\.md\\'"
+  :config
+  (setq markdown-command (executable-find "pandoc")))
+
+(use-package impatient-mode
+  :straight (:host github :repo "skeeto/impatient-mode"
+                   :files ("*.html" "*.js" "impatient-mode.el"))
+  :defer t
+  :init
+  ;; https://stackoverflow.com/a/36189456
+  ;; https://stackoverflow.com/a/51860126
+  (defun markdown-html (buffer)
+    (princ (with-current-buffer buffer
+             (format "<!DOCTYPE html><html><script src=\"https://cdnjs.cloudflare.com/ajax/libs/he/1.1.1/he.js\"></script><link rel=\"stylesheet\" href=\"https://assets-cdn.github.com/assets/github-e6bb18b320358b77abe040d2eb46b547.css\"><link rel=\"stylesheet\" href=\"https://assets-cdn.github.com/assets/frameworks-95aff0b550d3fe338b645a4deebdcb1b.css\"><title>Impatient Markdown</title><div id=\"markdown-content\" style=\"display:none\">%s</div><div class=\"markdown-body\" style=\"max-width:968px;margin:0 auto;\"></div><script>fetch('https://api.github.com/markdown', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ \"text\": document.getElementById('markdown-content').innerHTML, \"mode\": \"gfm\", \"context\": \"knit-pk/homepage-nuxtjs\"}) }).then(response => response.text()).then(response => {document.querySelector('.markdown-body').innerHTML = he.decode(response)}).then(() => { fetch(\"https://gist.githubusercontent.com/FieryCod/b6938b29531b6ec72de25c76fa978b2c/raw/\").then(response => response.text()).then(eval)});</script></html>"
+                     (buffer-substring-no-properties (point-min) (point-max))))
+           (current-buffer)))
+  (defun markdown-preview-github ()
+    (interactive)
+    (impatient-mode 1)
+    (setq imp-user-filter #'markdown-html)
+    (cl-incf imp-last-state)
+    (imp--notify-clients)))

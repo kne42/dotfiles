@@ -111,9 +111,9 @@ cd ~/Projects/
 
 function myssh { cat $SSH_KEY_PATH.pub | pbcopy; }
 
-open-pymodule () {
+pymodule () {
 	MODULE=$1
-	open `python -c "import $MODULE; print($MODULE.__file__)"`
+	echo `python -c "import $MODULE; print($MODULE.__file__)"`
 }
 
 relpath () { echo "$(cd "$(dirname "$1")"; pwd)/$(basename "$1")"; }
@@ -130,6 +130,7 @@ alias sudo="sudo "
 if [ -z ${ORIG_EMACS+x} ]; then ORIG_EMACS=$(which emacs); fi
 alias emacs+=$ORIG_EMACS
 alias emacs="rm -f ~/Library/Colors/Emacs.clr; $ORIG_EMACS"
-alias emacs-="emacs -nw"
+alias emacs-="emacs --minimize-startup"
+alias emacs--="emacs -nw"
 
 source ~/.zsh_local

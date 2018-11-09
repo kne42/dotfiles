@@ -3,6 +3,10 @@ pr-fetch = "!_(){ git fetch ${2:-upstream} pull/$1/head; }; _"
 pr = "!_(){ git pr-fetch $2 $1; git checkout FETCH_HEAD -B pr-$1; }; _"
 pr-merge = "!_(){ git pr-fetch $2 $1; git merge FETCH_HEAD; }; _"
 
+[filter "clearNotebookOutput"]
+	clean = jupyter nbconvert --ClearOutputPreprocessor.enabled=True --inplace %f
+	smudge = cat
+
 [user]
 	name = Kira Evans
 	email = contact@kne42.me
@@ -13,6 +17,7 @@ pr-merge = "!_(){ git pr-fetch $2 $1; git merge FETCH_HEAD; }; _"
 [core]
 	editor = nano
 	excludesfile = ~/.gitignore_global
+	attributesfile = ~/.gitattributes_global
 
 [merge]
 	log = true

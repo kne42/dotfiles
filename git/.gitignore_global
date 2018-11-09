@@ -111,5 +111,8 @@ workspace.xml
 *[~#]
 .#*
 
+# Emacs meghanada
+.meghanada
+
 # MacOS
 .DS_Store
