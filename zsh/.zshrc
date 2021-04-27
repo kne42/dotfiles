@@ -63,7 +63,8 @@ ZSH_THEME="robbyrussell"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  git
+    git
+    zsh-nvm
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -102,7 +103,7 @@ conda activate
 
 PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"
 MANPATH="/usr/local/opt/gnu-tar/libexec/gnuman:$MANPATH"
-export SSH_KEY_PATH="~/.ssh/id_rsa"
+export SSH_KEY_PATH=~/.ssh/id_rsa
 
 PREV=$(pwd)
 
@@ -114,6 +115,11 @@ function myssh { cat $SSH_KEY_PATH.pub | pbcopy; }
 pymodule () {
 	MODULE=$1
 	echo `python -c "import $MODULE; print($MODULE.__file__)"`
+}
+
+pyver () {
+        MODULE=$1
+        echo `python -c "import $MODULE; print($MODULE.__version__)"`
 }
 
 relpath () { echo "$(cd "$(dirname "$1")"; pwd)/$(basename "$1")"; }
@@ -134,3 +140,4 @@ alias emacs-="emacs --minimize-startup"
 alias emacs--="emacs -nw"
 
 source ~/.zsh_local
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi

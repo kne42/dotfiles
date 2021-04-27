@@ -578,7 +578,6 @@
 ;;-----------------------------------------------------------------------------
 ;; Python
 ;;-----------------------------------------------------------------------------
-
 (eval-after-load 'exec-path-from-shell  ; for `:if' to take effect
   (use-package python
     :if (executable-find "python")
@@ -679,23 +678,11 @@
                                "\\9")
                        nil t delimited nil nil start end backward))))
 
-
-;;-----------------------------------------------------------------------------
-;; Common C
-;;-----------------------------------------------------------------------------
-
-(use-package cc-mode
-  :init
-  (use-package meghanada
-    :straight (:host github :repo "mopemope/meghanada-emacs")
-    :hook (java-mode . meghanada-mode)
-    :config
-    (setq c-basic-offset 2)
-    (add-hook 'before-save-hook 'meghanada-code-beautify-before-save)
-    (unbind-key "C-d" java-mode-map)
-    (unbind-key "C-M-q" java-mode-map)
-    (unbind-key "C-M-a" java-mode-map)
-    (unbind-key "C-M-e" java-mode-map)))
+(use-package cython-mode
+  :straight (:host github :repo "cython/cython"
+                   :files ("Tools/*.el"))
+  :mode (("\\.pyx\\'" . cython-mode)
+         ("\\.pxd\\'" . cython-mode)))
 
 
 ;;-----------------------------------------------------------------------------
