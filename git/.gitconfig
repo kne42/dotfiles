@@ -32,9 +32,14 @@
 	pushInsteadOf = "git://github.com/"
 	pushInsteadOf = "https://github.com/"
 
-[url "git://github.com/"]
+[url "https://github.com/"]
 	insteadOf = "gh:"
-	insteadOf = "https://github.com/"
+	insteadOf = "git://github.com/"
+
+[url "git@gitlab.com:"]
+        insteadOf = "gl:"
+        pushInsteadOf = "gl:"
+        pushInsteadOf = "https://gitlab.com/"
 
 [include]
 	path = ~/.gitconfig_local

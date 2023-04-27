@@ -98,9 +98,6 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-source ~/.conda/etc/profile.d/conda.sh
-conda activate
-
 PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"
 MANPATH="/usr/local/opt/gnu-tar/libexec/gnuman:$MANPATH"
 export SSH_KEY_PATH=~/.ssh/id_rsa
@@ -141,3 +138,23 @@ alias emacs--="emacs -nw"
 
 source ~/.zsh_local
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/Users/kiraevans/mambaforge/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/Users/kiraevans/mambaforge/etc/profile.d/conda.sh" ]; then
+        . "/Users/kiraevans/mambaforge/etc/profile.d/conda.sh"
+    else
+        export PATH="/Users/kiraevans/mambaforge/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+
+if [ -f "/Users/kiraevans/mambaforge/etc/profile.d/mamba.sh" ]; then
+    . "/Users/kiraevans/mambaforge/etc/profile.d/mamba.sh"
+fi
+# <<< conda initialize <<<
+
