@@ -142,7 +142,7 @@
 ;; via sexp-based diffs
 ;; `use-package' integration: `:init/el-patch', `:config/el-patch'
 (use-package el-patch
-  :straight (:host github :repo "raxod502/el-patch" :branch "develop"))
+  :straight (:host github :repo "raxod502/el-patch"))
 
 
 ;;-----------------------------------------------------------------------------
